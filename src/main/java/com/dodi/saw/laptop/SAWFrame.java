@@ -68,7 +68,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
             
             while (r.next()) {
                 int id = r.getInt("id");
-                int altId = r.getInt("alt_id");
+                String altId = r.getString("alt_id");
                 int harga = r .getInt("harga");
                 int prosesor = r .getInt("skor_prosesor");
                 int ram = r .getInt("ukuran_RAM");
@@ -85,7 +85,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
                 
                 Object[] rowDataNormalisasi = new Object[r.getMetaData().getColumnCount()];
 
-                rowDataNormalisasi[0] = id;
+                rowDataNormalisasi[0] = altId;
                 rowDataNormalisasi[1] = n_harga;
                 rowDataNormalisasi[2] = n_prosesor;
                 rowDataNormalisasi[3] = n_ram;
@@ -104,7 +104,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
                 double b_layar = n_layar*bobot("ukuran_layar");
                 double b_baterai = n_baterai*bobot("daya_baterai");
                 
-                rowDataTerbobot[0] = id;
+                rowDataTerbobot[0] = altId;
                 rowDataTerbobot[1] = b_harga;
                 rowDataTerbobot[2] = b_prosesor;
                 rowDataTerbobot[3] = b_ram;
@@ -119,7 +119,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
                 double total = b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai;
                 double totalPersen = (b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai) * 100;
                   
-                rowDataRank[0] = id;
+                rowDataRank[0] = altId;
                 rowDataRank[1] = (int) Math.floor(totalPersen) + "% (" + total +")";
                 
                 modelRank.addRow(rowDataRank);
@@ -187,7 +187,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
      * @param opsi 1=min, 2=max
      * @return 
      */
-    private double minMax(String kolom, int opsi){
+    public static double minMax(String kolom, int opsi){
         double val = 0;
         try {
             var q="";
@@ -207,41 +207,6 @@ public class SAWFrame extends javax.swing.JInternalFrame {
         }
         return val;
     }
-    
-    // getData to table
-//    public static void refreshData() {
-//        try {
-//            conn = LoginScreen.conn;
-//            stmt = conn.createStatement();
-//            rs = stmt.executeQuery("SELECT * FROM nilai");
-//            
-//            DefaultTableModel model = new DefaultTableModel();
-//            
-//            model.addColumn("ID");
-//            model.addColumn("alt_id");
-//            model.addColumn("harga");
-//            model.addColumn("Skor Prosesor");
-//            model.addColumn("Ukuran RAM");
-//            model.addColumn("Penyimpanan");
-//            model.addColumn("Ukuran Layar");
-//            model.addColumn("Daya Baterai");
-//            
-//            
-//            tablePenilaian.setModel(model);
-//            
-//            while (rs.next()) {
-//                Object[] rowData = new Object[rs.getMetaData().getColumnCount()];
-//                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-//                    rowData[i - 1] = rs.getObject(i);
-//                }
-//                model.addRow(rowData);
-//            }
-//            
-//            rs.close();
-//            stmt.close();
-//        } catch (SQLException e) { System.out.println(e.getMessage()); }
-//    }
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -310,7 +275,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
         jScrollPane3.setViewportView(tablePerangkingan);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel4.setText("Perangkingan");
+        jLabel4.setText("Hasil Akhir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -320,13 +285,13 @@ public class SAWFrame extends javax.swing.JInternalFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
