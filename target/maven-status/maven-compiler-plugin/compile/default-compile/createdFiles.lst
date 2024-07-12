@@ -1,7 +1,6 @@
 com\dodi\saw\laptop\DeleteAlt$1.class
 com\dodi\saw\laptop\EditPenilaian$4.class
 com\dodi\saw\laptop\DeletePenilaian$2.class
-com\dodi\saw\laptop\Main$1.class
 com\dodi\saw\laptop\SAWFrame.class
 com\dodi\saw\laptop\AddAlt$3.class
 com\dodi\saw\laptop\AlternatifFrame$1.class
@@ -26,7 +25,6 @@ com\dodi\saw\laptop\DeleteAlt$3.class
 com\dodi\saw\laptop\EditAlt$3.class
 com\dodi\saw\laptop\MainScreen$2.class
 com\dodi\saw\laptop\AlternatifFrame$3.class
-com\dodi\saw\laptop\Main.class
 com\dodi\saw\laptop\Koneksi.class
 com\dodi\saw\laptop\MainScreen$5.class
 com\dodi\saw\laptop\EditPenilaian$6.class

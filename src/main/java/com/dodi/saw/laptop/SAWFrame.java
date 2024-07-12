@@ -8,6 +8,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author dodih
  */
-public class SAWFrame extends javax.swing.JInternalFrame {
+public final class SAWFrame extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form SAWFrame
@@ -32,121 +36,110 @@ public class SAWFrame extends javax.swing.JInternalFrame {
     public void hitungSAW(){
         try {
             Connection k = Koneksi.Go();
-            Statement st = k.createStatement();
-            var q = "SELECT * FROM nilai";
-            ResultSet r = st.executeQuery(q);
-            
-            DefaultTableModel modelNormalisasi = new DefaultTableModel();
-            DefaultTableModel modelTerbobot = new DefaultTableModel();
-            DefaultTableModel modelRank = new DefaultTableModel();
-
-            
-            modelNormalisasi.addColumn("ID Alternatif");
-            modelNormalisasi.addColumn("harga");
-            modelNormalisasi.addColumn("Skor Prosesor");
-            modelNormalisasi.addColumn("Ukuran RAM");
-            modelNormalisasi.addColumn("Penyimpanan");
-            modelNormalisasi.addColumn("Ukuran Layar");
-            modelNormalisasi.addColumn("Daya Baterai");
-            
-            modelTerbobot.addColumn("ID Alternatif");
-            modelTerbobot.addColumn("harga");
-            modelTerbobot.addColumn("Skor Prosesor");
-            modelTerbobot.addColumn("Ukuran RAM");
-            modelTerbobot.addColumn("Penyimpanan");
-            modelTerbobot.addColumn("Ukuran Layar");
-            modelTerbobot.addColumn("Daya Baterai");
-            
-            
-            modelRank.addColumn("ID Alternatif");
-            modelRank.addColumn("Total");
-            
-            tableNormalisasi.setModel(modelNormalisasi);
-            tableTerbobot.setModel(modelTerbobot);            
-            tablePerangkingan.setModel(modelRank);
-            
-            
-            while (r.next()) {
-                int id = r.getInt("id");
-                String altId = r.getString("alt_id");
-                int harga = r .getInt("harga");
-                int prosesor = r .getInt("skor_prosesor");
-                int ram = r .getInt("ukuran_RAM");
-                int penyimpanan = r .getInt("ukuran_penyimpanan");
-                int layar = r .getInt("ukuran_layar");
-                int baterai = r .getInt("daya_baterai");
-                
-                double n_harga = minMax("harga",1)/harga;
-                double n_prosesor = prosesor/minMax("skor_prosesor",2);
-                double n_ram = ram/minMax("ukuran_RAM",2);
-                double n_penyimpanan = penyimpanan/minMax("ukuran_penyimpanan",2);
-                double n_layar = layar/minMax("ukuran_layar",2);
-                double n_baterai = baterai/minMax("daya_baterai",2);
-                
-                Object[] rowDataNormalisasi = new Object[r.getMetaData().getColumnCount()];
-
-                rowDataNormalisasi[0] = altId;
-                rowDataNormalisasi[1] = n_harga;
-                rowDataNormalisasi[2] = n_prosesor;
-                rowDataNormalisasi[3] = n_ram;
-                rowDataNormalisasi[4] = n_penyimpanan;
-                rowDataNormalisasi[5] = n_layar;
-                rowDataNormalisasi[6] = n_baterai;
-                
-                modelNormalisasi.addRow(rowDataNormalisasi); 
-                
-                Object[] rowDataTerbobot = new Object[r.getMetaData().getColumnCount()];
-                
-                double b_harga = n_harga*bobot("harga");
-                double b_prosesor = n_prosesor*bobot("skor_prosesor");
-                double b_ram = n_ram*bobot("ukuran_RAM");
-                double b_penyimpanan = n_penyimpanan*bobot("ukuran_penyimpanan");
-                double b_layar = n_layar*bobot("ukuran_layar");
-                double b_baterai = n_baterai*bobot("daya_baterai");
-                
-                rowDataTerbobot[0] = altId;
-                rowDataTerbobot[1] = b_harga;
-                rowDataTerbobot[2] = b_prosesor;
-                rowDataTerbobot[3] = b_ram;
-                rowDataTerbobot[4] = b_penyimpanan;
-                rowDataTerbobot[5] = b_layar;
-                rowDataTerbobot[6] = b_baterai;
-                
-                modelTerbobot.addRow(rowDataTerbobot); 
-                
-                Object[] rowDataRank = new Object[r.getMetaData().getColumnCount() - 6];
-                
-                double total = b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai;
-                double totalPersen = (b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai) * 100;
-                  
-                rowDataRank[0] = altId;
-                rowDataRank[1] = (int) Math.floor(totalPersen) + "% (" + total +")";
-                
-                modelRank.addRow(rowDataRank);
-                
+            try (Statement st = k.createStatement()) {
+                var q = "SELECT * FROM nilai";
+                try (ResultSet r = st.executeQuery(q)) {
+                    DefaultTableModel modelNormalisasi = new DefaultTableModel();
+                    DefaultTableModel modelTerbobot = new DefaultTableModel();
+                    DefaultTableModel modelRank = new DefaultTableModel();
+                    
+                    modelNormalisasi.addColumn("ID Alternatif");
+                    modelNormalisasi.addColumn("harga");
+                    modelNormalisasi.addColumn("Skor Prosesor");
+                    modelNormalisasi.addColumn("Ukuran RAM");
+                    modelNormalisasi.addColumn("Penyimpanan");
+                    modelNormalisasi.addColumn("Ukuran Layar");
+                    modelNormalisasi.addColumn("Daya Baterai");
+                    
+                    modelTerbobot.addColumn("ID Alternatif");
+                    modelTerbobot.addColumn("harga");
+                    modelTerbobot.addColumn("Skor Prosesor");
+                    modelTerbobot.addColumn("Ukuran RAM");
+                    modelTerbobot.addColumn("Penyimpanan");
+                    modelTerbobot.addColumn("Ukuran Layar");
+                    modelTerbobot.addColumn("Daya Baterai");
+                    
+                    modelRank.addColumn("Rangking");
+                    modelRank.addColumn("ID Alternatif");
+                    modelRank.addColumn("Total");
+                    
+                    tableNormalisasi.setModel(modelNormalisasi);
+                    tableTerbobot.setModel(modelTerbobot);
+                    tablePerangkingan.setModel(modelRank);
+                    
+                    ArrayList<Double> listRank = new ArrayList<>();
+                    HashMap<Double, String> sementara = new HashMap<>();
+                    
+                    while (r.next()) {
+                        String altId = r.getString("alt_id");
+                        int harga = r .getInt("harga");
+                        int prosesor = r .getInt("skor_prosesor");
+                        int ram = r .getInt("ukuran_RAM");
+                        int penyimpanan = r .getInt("ukuran_penyimpanan");
+                        int layar = r .getInt("ukuran_layar");
+                        int baterai = r .getInt("daya_baterai");
+                        
+                        double n_harga = minMax("harga",1)/harga;
+                        double n_prosesor = prosesor/minMax("skor_prosesor",2);
+                        double n_ram = ram/minMax("ukuran_RAM",2);
+                        double n_penyimpanan = penyimpanan/minMax("ukuran_penyimpanan",2);
+                        double n_layar = layar/minMax("ukuran_layar",2);
+                        double n_baterai = baterai/minMax("daya_baterai",2);
+                        
+                        Object[] rowDataNormalisasi = new Object[r.getMetaData().getColumnCount()];
+                        
+                        rowDataNormalisasi[0] = altId;
+                        rowDataNormalisasi[1] = n_harga;
+                        rowDataNormalisasi[2] = n_prosesor;
+                        rowDataNormalisasi[3] = n_ram;
+                        rowDataNormalisasi[4] = n_penyimpanan;
+                        rowDataNormalisasi[5] = n_layar;
+                        rowDataNormalisasi[6] = n_baterai;
+                        
+                        modelNormalisasi.addRow(rowDataNormalisasi);
+                        
+                        Object[] rowDataTerbobot = new Object[r.getMetaData().getColumnCount()];
+                        
+                        double b_harga = n_harga*bobot("harga");
+                        double b_prosesor = n_prosesor*bobot("skor_prosesor");
+                        double b_ram = n_ram*bobot("ukuran_RAM");
+                        double b_penyimpanan = n_penyimpanan*bobot("ukuran_penyimpanan");
+                        double b_layar = n_layar*bobot("ukuran_layar");
+                        double b_baterai = n_baterai*bobot("daya_baterai");
+                        
+                        rowDataTerbobot[0] = altId;
+                        rowDataTerbobot[1] = b_harga;
+                        rowDataTerbobot[2] = b_prosesor;
+                        rowDataTerbobot[3] = b_ram;
+                        rowDataTerbobot[4] = b_penyimpanan;
+                        rowDataTerbobot[5] = b_layar;
+                        rowDataTerbobot[6] = b_baterai;
+                        
+                        modelTerbobot.addRow(rowDataTerbobot);
+                        
+                        Object[] rowDataRank = new Object[r.getMetaData().getColumnCount() - 6];
+                        
+                        double total = b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai;
+                        double totalPersen = (b_harga + b_prosesor + b_ram + b_penyimpanan + b_layar + b_baterai) * 100;
+                        
+                        rowDataRank[0] = altId;
+                        rowDataRank[1] = (int) Math.floor(totalPersen) + "% (" + total +")";
+                        sementara.put(total, altId);
+                        listRank.add(total);
+                    }
+                    
+                    listRank.sort(Collections.reverseOrder());
+                    
+                    int index = 1;
+                    for(Double nilai : listRank){
+                        modelRank.addRow(new Object[]{index, sementara.get(nilai), nilai});
+                        index++;
+                    }
+                }
             }
-            r.close();
-            st.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-    
-    
-    private String getAlt(int altId){
-        String alt = "";
-        try {
-            Connection k = Koneksi.Go();
-            Statement st = k.createStatement();
-            var q = "SELECT nama_laptop FROM alternatif WHERE id="+ altId;
-            ResultSet r = st.executeQuery(q);
-            while(r.next()) {
-                alt = r.getString("nama_laptop");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return alt;
     }
     
     private double bobot(String kriteria) {
@@ -159,27 +152,12 @@ public class SAWFrame extends javax.swing.JInternalFrame {
             while(r.next()) {
                 bobot = r.getDouble("bobot");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return bobot;
     }
     
-    private String cb(String kriteria){
-        String label = "";
-        try {
-            Connection k = Koneksi.Go();
-            Statement st = k.createStatement();
-            var q = "SELECT label FROM kriteria WHERE kriteria="+ kriteria;
-            ResultSet r = st.executeQuery(q);
-            while(r.next()) {
-                label = r.getString("label");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return label;
-    }
     
     /**
      * 
@@ -275,7 +253,7 @@ public class SAWFrame extends javax.swing.JInternalFrame {
         jScrollPane3.setViewportView(tablePerangkingan);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel4.setText("Hasil Akhir");
+        jLabel4.setText("Perangkingan");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

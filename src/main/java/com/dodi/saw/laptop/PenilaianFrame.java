@@ -116,8 +116,11 @@ public class PenilaianFrame extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablePenilaian.setGridColor(new java.awt.Color(204, 204, 204));
+        tablePenilaian.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(tablePenilaian);
 
+        btnAdd.setBackground(new java.awt.Color(102, 204, 255));
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAdd.setText("Tambah Data");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +129,7 @@ public class PenilaianFrame extends javax.swing.JInternalFrame {
             }
         });
 
+        btnEdit.setBackground(new java.awt.Color(255, 255, 153));
         btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEdit.setText("Edit Data");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -134,6 +138,7 @@ public class PenilaianFrame extends javax.swing.JInternalFrame {
             }
         });
 
+        btnDelete.setBackground(new java.awt.Color(255, 153, 153));
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnDelete.setText("Hapus Data");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -173,7 +178,7 @@ public class PenilaianFrame extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)

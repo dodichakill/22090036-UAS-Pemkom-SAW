@@ -90,6 +90,7 @@ public class AlternatifFrame extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(tableAlternatif);
 
+        btnAdd.setBackground(new java.awt.Color(102, 204, 255));
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAdd.setText("Tambah Data");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -98,6 +99,7 @@ public class AlternatifFrame extends javax.swing.JInternalFrame {
             }
         });
 
+        btnEdit.setBackground(new java.awt.Color(255, 255, 153));
         btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEdit.setText("Edit Data");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -106,6 +108,7 @@ public class AlternatifFrame extends javax.swing.JInternalFrame {
             }
         });
 
+        btnDelete.setBackground(new java.awt.Color(255, 153, 153));
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnDelete.setText("Hapus Data");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -146,8 +149,8 @@ public class AlternatifFrame extends javax.swing.JInternalFrame {
                         .addGap(106, 106, 106)
                         .addComponent(jLabel1)))
                 .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                .addGap(159, 159, 159))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         pack();
